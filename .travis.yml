@@ -1,0 +1,10 @@
+language: cpp
+os:
+  - osx
+compiler:
+  - clang
+install:
+  - brew install sdl2 freetype libvorbis libepoxy webp
+script:
+  - cmake .
+  - make -j$(nproc)
