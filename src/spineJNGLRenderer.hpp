@@ -1,5 +1,7 @@
 #pragma once
 
+#include <jngl.hpp>
+
 #define SPINE_SHORT_NAMES
 #include <spine/spine.h>
 #include <spine/extension.h>
@@ -8,7 +10,7 @@ _SP_ARRAY_DECLARE_TYPE(spColorArray, spColor)
 
 namespace spine {
 
-class SkeletonDrawable{  //: public sf::Drawable {
+class SkeletonDrawable : public jngl::Drawable {
 public:
 	Skeleton* skeleton;
 	AnimationState* state;
@@ -19,10 +21,9 @@ public:
 	SkeletonDrawable (SkeletonData* skeleton, AnimationStateData* stateData = 0);
 	~SkeletonDrawable ();
 
-	void update (float deltaTime);
+	void step() override;
 
-	// virtual void draw (sf::RenderTarget& target, sf::RenderStates states) const;
-	virtual void draw (int target, int states) const;
+	void draw() const override;
 
 	void setUsePremultipliedAlpha(bool usePMA) { usePremultipliedAlpha = usePMA; };
 	bool getUsePremultipliedAlpha() { return usePremultipliedAlpha; };

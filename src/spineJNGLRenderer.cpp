@@ -63,21 +63,22 @@ SkeletonDrawable::~SkeletonDrawable () {
 	spColorArray_dispose(tempColors);
 }
 
-void SkeletonDrawable::update (float deltaTime) {
+void SkeletonDrawable::step() {
+	const float deltaTime = 1.f / float(jngl::getStepsPerSecond());
 	Skeleton_update(skeleton, deltaTime);
 	AnimationState_update(state, deltaTime * timeScale);
 	AnimationState_apply(state, skeleton);
 	Skeleton_updateWorldTransform(skeleton);
 }
 
-void SkeletonDrawable::draw (RenderTarget& target, RenderStates states) const {
+void SkeletonDrawable::draw() const {
 	// vertexArray->clear();
-	states.texture = 0;
+	// states.texture = 0;
 	unsigned short quadIndices[6] = { 0, 1, 2, 2, 3, 0 };
 
 	if (vertexEffect != 0) vertexEffect->begin(vertexEffect, skeleton);
 
-	sf::Vertex vertex;
+	// sf::Vertex vertex;
 	jngl::Sprite* texture = 0;
 	for (int i = 0; i < skeleton->slotsCount; ++i) {
 		Slot* slot = skeleton->drawOrder[i];
@@ -117,20 +118,20 @@ void SkeletonDrawable::draw (RenderTarget& target, RenderStates states) const {
 			continue;
 		} else continue;
 
-		Uint8 r = static_cast<Uint8>(skeleton->color.r * slot->color.r * attachmentColor->r * 255);
-		Uint8 g = static_cast<Uint8>(skeleton->color.g * slot->color.g * attachmentColor->g * 255);
-		Uint8 b = static_cast<Uint8>(skeleton->color.b * slot->color.b * attachmentColor->b * 255);
-		Uint8 a = static_cast<Uint8>(skeleton->color.a * slot->color.a * attachmentColor->a * 255);
-		vertex.color.r = r;
-		vertex.color.g = g;
-		vertex.color.b = b;
-		vertex.color.a = a;
+		// Uint8 r = static_cast<Uint8>(skeleton->color.r * slot->color.r * attachmentColor->r * 255);
+		// Uint8 g = static_cast<Uint8>(skeleton->color.g * slot->color.g * attachmentColor->g * 255);
+		// Uint8 b = static_cast<Uint8>(skeleton->color.b * slot->color.b * attachmentColor->b * 255);
+		// Uint8 a = static_cast<Uint8>(skeleton->color.a * slot->color.a * attachmentColor->a * 255);
+		// vertex.color.r = r;
+		// vertex.color.g = g;
+		// vertex.color.b = b;
+		// vertex.color.a = a;
 
-		spColor light;
-		light.r = r / 255.0f;
-		light.g = g / 255.0f;
-		light.b = b / 255.0f;
-		light.a = a / 255.0f;
+		// spColor light;
+		// light.r = r / 255.0f;
+		// light.g = g / 255.0f;
+		// light.b = b / 255.0f;
+		// light.a = a / 255.0f;
 
         // TODO wieder rein
 		// sf::BlendMode blend;
@@ -170,31 +171,31 @@ void SkeletonDrawable::draw (RenderTarget& target, RenderStates states) const {
 		// 	}
 		// }
 
-		if (states.texture == 0) states.texture = texture;
+		// if (states.texture == 0) states.texture = texture;
 
-		if (states.blendMode != blend || states.texture != texture) {
+		// if (states.blendMode != blend || states.texture != texture) {
 			// target.draw(*vertexArray, states);
 			// vertexArray->clear();
-			states.blendMode = blend;
-			states.texture = texture;
-		}
+		// 	states.blendMode = blend;
+		// 	states.texture = texture;
+		// }
 
-		if (spSkeletonClipping_isClipping(clipper)) {
-			spSkeletonClipping_clipTriangles(clipper, vertices, verticesCount << 1, indices, indicesCount, uvs, 2);
-			vertices = clipper->clippedVertices->items;
-			verticesCount = clipper->clippedVertices->size >> 1;
-			uvs = clipper->clippedUVs->items;
-			indices = clipper->clippedTriangles->items;
-			indicesCount = clipper->clippedTriangles->size;
-		}
+		// if (spSkeletonClipping_isClipping(clipper)) {
+		// 	spSkeletonClipping_clipTriangles(clipper, vertices, verticesCount << 1, indices, indicesCount, uvs, 2);
+		// 	vertices = clipper->clippedVertices->items;
+		// 	verticesCount = clipper->clippedVertices->size >> 1;
+		// 	uvs = clipper->clippedUVs->items;
+		// 	indices = clipper->clippedTriangles->items;
+		// 	indicesCount = clipper->clippedTriangles->size;
+		// }
 
-		Vector2u size = texture->getSize();
+		// Vector2u size = texture->getSize();
 
 		if (vertexEffect != 0) {
 			spFloatArray_clear(tempUvs);
 			spColorArray_clear(tempColors);
 			for (int i = 0; i < verticesCount; i++) {
-				spColor vertexColor = light;
+				// spColor vertexColor = light;
 				spColor dark;
 				dark.r = dark.g = dark.b = dark.a = 0;
 				int index = i << 1;
@@ -202,34 +203,34 @@ void SkeletonDrawable::draw (RenderTarget& target, RenderStates states) const {
 				float y = vertices[index + 1];
 				float u = uvs[index];
 				float v = uvs[index + 1];
-				vertexEffect->transform(vertexEffect, &x, &y, &u, &v, &vertexColor, &dark);
+				// vertexEffect->transform(vertexEffect, &x, &y, &u, &v, &vertexColor, &dark);
 				vertices[index] = x;
 				vertices[index + 1] = y;
 				spFloatArray_add(tempUvs, u);
 				spFloatArray_add(tempUvs, v);
-				spColorArray_add(tempColors, vertexColor);
+				// spColorArray_add(tempColors, vertexColor);
 			}
 
 			for (int i = 0; i < indicesCount; ++i) {
 				int index = indices[i] << 1;
-				vertex.position.x = vertices[index];
-				vertex.position.y = vertices[index + 1];
-				vertex.texCoords.x = uvs[index] * size.x;
-				vertex.texCoords.y = uvs[index + 1] * size.y;
+				// vertex.position.x = vertices[index];
+				// vertex.position.y = vertices[index + 1];
+				// vertex.texCoords.x = uvs[index] * size.x;
+				// vertex.texCoords.y = uvs[index + 1] * size.y;
 				spColor vertexColor = tempColors->items[index >> 1];
-				vertex.color.r = static_cast<Uint8>(vertexColor.r * 255);
-				vertex.color.g = static_cast<Uint8>(vertexColor.g * 255);
-				vertex.color.b = static_cast<Uint8>(vertexColor.b * 255);
-				vertex.color.a = static_cast<Uint8>(vertexColor.a * 255);
+				// vertex.color.r = static_cast<Uint8>(vertexColor.r * 255);
+				// vertex.color.g = static_cast<Uint8>(vertexColor.g * 255);
+				// vertex.color.b = static_cast<Uint8>(vertexColor.b * 255);
+				// vertex.color.a = static_cast<Uint8>(vertexColor.a * 255);
 				// vertexArray->append(vertex);
 			}
 		} else {
 			for (int i = 0; i < indicesCount; ++i) {
 				int index = indices[i] << 1;
-				vertex.position.x = vertices[index];
-				vertex.position.y = vertices[index + 1];
-				vertex.texCoords.x = uvs[index] * size.x;
-				vertex.texCoords.y = uvs[index + 1] * size.y;
+				// vertex.position.x = vertices[index];
+				// vertex.position.y = vertices[index + 1];
+				// vertex.texCoords.x = uvs[index] * size.x;
+				// vertex.texCoords.y = uvs[index + 1] * size.y;
 				// vertexArray->append(vertex);
 			}
 		}

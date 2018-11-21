@@ -66,12 +66,15 @@ SkeletonData* readSkeletonBinaryData (const char* filename, Atlas* atlas, float 
 void testcase (void func(SkeletonData* skeletonData, Atlas* atlas),
 		const char* jsonName, const char* binaryName, const char* atlasName,
 		float scale) {
+	jngl::showWindow("Spine JNGL - vine", 640, 640, false, {1,1}, {1,1});
 	Atlas* atlas = Atlas_createFromFile(atlasName, 0);
 
 	SkeletonData* skeletonData = readSkeletonJsonData(jsonName, atlas, scale);
 	func(skeletonData, atlas);
 	SkeletonData_dispose(skeletonData);
 
+	jngl::hideWindow();
+	jngl::showWindow("Spine JNGL - vine", 640, 640, false, {1,1}, {1,1});
 	skeletonData = readSkeletonBinaryData(binaryName, atlas, scale);
 	func(skeletonData, atlas);
 	SkeletonData_dispose(skeletonData);
@@ -90,26 +93,14 @@ void coin (SkeletonData* skeletonData, Atlas* atlas) {
 
 	AnimationState_setAnimationByName(drawable->state, 0, "rotate", true);
 
-	// sf::RenderWindow window(sf::VideoMode(640, 640), "Spine SFML - vine");
-	// window.setFramerateLimit(60);
-	// sf::Event event;
-	// sf::Clock deltaClock;
 	float swirlTime = 0;
-	while (true) {
-	// while (window.isOpen()) {
-	// 	while (window.pollEvent(event))
-	// 		if (event.type == sf::Event::Closed) window.close();
+	while (jngl::running()) {
+		jngl::updateInput();
 
-		// float delta = deltaClock.getElapsedTime().asSeconds();
-		// deltaClock.restart();
-		float delta = 25.0;
+		drawable->step();
+		drawable->draw();
 
-		jngl::getTime();
-		drawable->update(delta);
-
-		// window.clear();
-		// window.draw(*drawable);  //TODO das brauch ich irgendwie noch
-		// window.display();
+		jngl::swapBuffers();
 	}
 }
 
@@ -140,37 +131,6 @@ void test (SkeletonData* skeletonData, Atlas* atlas) {
 	Skeleton_dispose(skeleton);
 }
 
-
-class Main : public jngl::Work {
-public:
-	Main() {
-		// Aus der main.cpp sfml
-		// testcase(test, "data/tank-pro.json", "data/tank-pro.skel", "data/tank.atlas", 1.0f);
-		// testcase(coin, "data/coin-pro.json", "data/coin-pro.skel", "data/coin.atlas", 0.5f);
-
-
-		jngl::setBackgroundColor(0, 0, 0);
-	}
-
-	~Main() {
-	}
-
-	void step() override {
-		const auto mouse = jngl::getMousePos() +
-		                   jngl::Vec2(jngl::getScreenWidth() / 2, jngl::getScreenHeight() / 2);
-	}
-
-	void draw() const override {
-		jngl::translate(-jngl::getScreenWidth() / 2, - jngl::getScreenHeight() / 2);
-		jngl::setFontColor(255, 255, 255);
-		jngl::print("Hello World from JNGL!", 100, 100);
-	}
-
-private:
-};
-
 JNGL_MAIN_BEGIN {
-	jngl::showWindow("JNGL+Spine", WINDOW_WIDTH, WINDOW_HEIGHT, false);
-	jngl::setWork(std::make_shared<Main>());
-	jngl::mainLoop();
+	testcase(coin, "data/coin-pro.json", "data/coin-pro.skel", "data/coin.atlas", 0.5f);
 } JNGL_MAIN_END

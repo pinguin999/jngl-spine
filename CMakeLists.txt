@@ -11,4 +11,4 @@ add_executable(jngl-spine ${SRC})
 
 target_include_directories(jngl-spine PRIVATE subprojects/spine-c/spine-c/include/)
 
-target_link_libraries(jngl-spine jngl)
+target_link_libraries(jngl-spine jngl spine-c)
