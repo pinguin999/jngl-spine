@@ -4,7 +4,7 @@ project(jngl-spine LANGUAGES C CXX)
 set (CMAKE_CXX_STANDARD 14)
 
 add_subdirectory("subprojects/jngl")
-# add_subdirectory("subprojects/spine-c/spine-c/include")
+add_subdirectory("subprojects/spine-c")
 
 file(GLOB SRC src/*.cpp)
 add_executable(jngl-spine ${SRC})
