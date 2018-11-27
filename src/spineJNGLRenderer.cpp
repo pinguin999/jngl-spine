@@ -78,7 +78,7 @@ void SkeletonDrawable::draw() const {
 
 	if (vertexEffect != 0) vertexEffect->begin(vertexEffect, skeleton);
 
-	// sf::Vertex vertex;
+	std::vector<jngl::Vertex> vertexArray;
 	jngl::Sprite* texture = 0;
 	for (int i = 0; i < skeleton->slotsCount; ++i) {
 		Slot* slot = skeleton->drawOrder[i];
@@ -227,16 +227,18 @@ void SkeletonDrawable::draw() const {
 		} else {
 			for (int i = 0; i < indicesCount; ++i) {
 				int index = indices[i] << 1;
-				// vertex.position.x = vertices[index];
-				// vertex.position.y = vertices[index + 1];
-				// vertex.texCoords.x = uvs[index] * size.x;
-				// vertex.texCoords.y = uvs[index + 1] * size.y;
-				// vertexArray->append(vertex);
+				vertexArray.push_back(jngl::Vertex{
+					vertices[index],
+					vertices[index + 1],
+					uvs[index], // * size.x
+					uvs[index + 1], // * size.y
+				});
 			}
 		}
 
 		spSkeletonClipping_clipEnd(clipper, slot);
 	}
+	texture->drawMesh(vertexArray);
 	// target.draw(*vertexArray, states);
 	spSkeletonClipping_clipEnd2(clipper);
 

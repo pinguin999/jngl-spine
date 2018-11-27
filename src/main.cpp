@@ -66,15 +66,16 @@ SkeletonData* readSkeletonBinaryData (const char* filename, Atlas* atlas, float 
 void testcase (void func(SkeletonData* skeletonData, Atlas* atlas),
 		const char* jsonName, const char* binaryName, const char* atlasName,
 		float scale) {
+	jngl::cancelQuit();
 	jngl::showWindow("Spine JNGL - vine", 640, 640, false, {1,1}, {1,1});
+	jngl::setBackgroundColor(0, 0, 0);
 	Atlas* atlas = Atlas_createFromFile(atlasName, 0);
 
 	SkeletonData* skeletonData = readSkeletonJsonData(jsonName, atlas, scale);
 	func(skeletonData, atlas);
 	SkeletonData_dispose(skeletonData);
 
-	jngl::hideWindow();
-	jngl::showWindow("Spine JNGL - vine", 640, 640, false, {1,1}, {1,1});
+	jngl::cancelQuit();
 	skeletonData = readSkeletonBinaryData(binaryName, atlas, scale);
 	func(skeletonData, atlas);
 	SkeletonData_dispose(skeletonData);
@@ -93,13 +94,55 @@ void coin (SkeletonData* skeletonData, Atlas* atlas) {
 
 	AnimationState_setAnimationByName(drawable->state, 0, "rotate", true);
 
-	float swirlTime = 0;
 	while (jngl::running()) {
 		jngl::updateInput();
 
 		drawable->step();
 		drawable->draw();
 
+		jngl::swapBuffers();
+	}
+}
+
+void vine (SkeletonData* skeletonData, Atlas* atlas) {
+	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
+	drawable->timeScale = 1;
+
+	Skeleton* skeleton = drawable->skeleton;
+	skeleton->x = 320;
+	skeleton->y = 590;
+	Skeleton_updateWorldTransform(skeleton);
+
+	AnimationState_setAnimationByName(drawable->state, 0, "grow", true);
+
+	jngl::setTitle("Spine JNGL - vine");
+	while (jngl::running()) {
+		jngl::updateInput();
+
+		drawable->step();
+		drawable->draw();
+
+		jngl::swapBuffers();
+	}
+}
+
+void tank (SkeletonData* skeletonData, Atlas* atlas) {
+	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
+	drawable->timeScale = 1;
+
+	Skeleton* skeleton = drawable->skeleton;
+	skeleton->x = 500;
+	skeleton->y = 590;
+	Skeleton_updateWorldTransform(skeleton);
+
+	AnimationState_setAnimationByName(drawable->state, 0, "drive", true);
+
+	jngl::setTitle("Spine JNGL - tank");
+
+	while (jngl::running()) {
+		jngl::updateInput();
+		drawable->step();
+		drawable->draw();
 		jngl::swapBuffers();
 	}
 }
@@ -132,5 +175,8 @@ void test (SkeletonData* skeletonData, Atlas* atlas) {
 }
 
 JNGL_MAIN_BEGIN {
+	testcase(test, "data/tank-pro.json", "data/tank-pro.skel", "data/tank.atlas", 1.0f);
 	testcase(coin, "data/coin-pro.json", "data/coin-pro.skel", "data/coin.atlas", 0.5f);
+	testcase(vine, "data/vine-pro.json", "data/vine-pro.skel", "data/vine.atlas", 0.5f);
+	testcase(tank, "data/tank-pro.json", "data/tank-pro.skel", "data/tank.atlas", 0.2f);
 } JNGL_MAIN_END
