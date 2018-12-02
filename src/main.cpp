@@ -147,6 +147,27 @@ void tank (SkeletonData* skeletonData, Atlas* atlas) {
 	}
 }
 
+void pd (SkeletonData* skeletonData, Atlas* atlas) {
+	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
+	drawable->timeScale = 1;
+
+	Skeleton* skeleton = drawable->skeleton;
+	skeleton->x = 900;
+	skeleton->y = 410;
+	Skeleton_updateWorldTransform(skeleton);
+
+	AnimationState_setAnimationByName(drawable->state, 0, "idle", true);
+
+	jngl::setTitle("Spine JNGL - Dog");
+
+	while (jngl::running()) {
+		jngl::updateInput();
+		drawable->step();
+		drawable->draw();
+		jngl::swapBuffers();
+	}
+}
+
 /**
  * Used for debugging purposes during runtime development
  */
@@ -179,4 +200,5 @@ JNGL_MAIN_BEGIN {
 	testcase(coin, "data/coin-pro.json", "data/coin-pro.skel", "data/coin.atlas", 0.5f);
 	testcase(vine, "data/vine-pro.json", "data/vine-pro.skel", "data/vine.atlas", 0.5f);
 	testcase(tank, "data/tank-pro.json", "data/tank-pro.skel", "data/tank.atlas", 0.2f);
+	testcase(pd, "data/dog_01_normal.json", "data/dog_01_normal.skel", "data/dog_01_normal.atlas", 1.1f);
 } JNGL_MAIN_END

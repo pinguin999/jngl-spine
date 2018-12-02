@@ -1,0 +1,195 @@
+
+dog_01_normal.png
+size: 2048,256
+format: RGBA8888
+filter: Linear,Linear
+repeat: none
+bein_a_01
+  rotate: false
+  xy: 1694, 68
+  size: 90, 78
+  orig: 90, 78
+  offset: 0, 0
+  index: -1
+bein_b_01
+  rotate: false
+  xy: 1786, 68
+  size: 90, 78
+  orig: 90, 78
+  offset: 0, 0
+  index: -1
+bein_c_01
+  rotate: false
+  xy: 1935, 6
+  size: 71, 78
+  orig: 71, 78
+  offset: 0, 0
+  index: -1
+bein_d_01
+  rotate: false
+  xy: 632, 17
+  size: 71, 78
+  orig: 71, 78
+  offset: 0, 0
+  index: -1
+blink_01_01
+  rotate: false
+  xy: 434, 10
+  size: 97, 85
+  orig: 97, 85
+  offset: 0, 0
+  index: -1
+blink_01_02
+  rotate: false
+  xy: 533, 10
+  size: 97, 85
+  orig: 97, 85
+  offset: 0, 0
+  index: -1
+blink_01_03
+  rotate: false
+  xy: 1397, 61
+  size: 97, 85
+  orig: 97, 85
+  offset: 0, 0
+  index: -1
+blink_01_04
+  rotate: false
+  xy: 1496, 61
+  size: 97, 85
+  orig: 97, 85
+  offset: 0, 0
+  index: -1
+blink_01_05
+  rotate: false
+  xy: 1595, 61
+  size: 97, 85
+  orig: 97, 85
+  offset: 0, 0
+  index: -1
+haare_01_01
+  rotate: false
+  xy: 641, 98
+  size: 187, 156
+  orig: 187, 156
+  offset: 0, 0
+  index: -1
+haare_01_02
+  rotate: false
+  xy: 830, 98
+  size: 187, 156
+  orig: 187, 156
+  offset: 0, 0
+  index: -1
+haare_01_03
+  rotate: false
+  xy: 1019, 98
+  size: 187, 156
+  orig: 187, 156
+  offset: 0, 0
+  index: -1
+haare_01_04
+  rotate: false
+  xy: 1208, 98
+  size: 187, 156
+  orig: 187, 156
+  offset: 0, 0
+  index: -1
+kiefer_01
+  rotate: false
+  xy: 434, 97
+  size: 205, 157
+  orig: 205, 157
+  offset: 0, 0
+  index: -1
+koerper_01
+  rotate: false
+  xy: 2, 39
+  size: 214, 215
+  orig: 214, 215
+  offset: 0, 0
+  index: -1
+koerper_01b
+  rotate: false
+  xy: 218, 39
+  size: 214, 215
+  orig: 214, 215
+  offset: 0, 0
+  index: -1
+krone_01_a
+  rotate: true
+  xy: 1878, 2
+  size: 82, 55
+  orig: 82, 55
+  offset: 0, 0
+  index: -1
+pupille_l_01
+  rotate: false
+  xy: 1981, 147
+  size: 16, 15
+  orig: 16, 15
+  offset: 0, 0
+  index: -1
+pupille_r_01
+  rotate: false
+  xy: 2, 9
+  size: 26, 28
+  orig: 26, 28
+  offset: 0, 0
+  index: -1
+spit001
+  rotate: false
+  xy: 2000, 216
+  size: 44, 38
+  orig: 44, 38
+  offset: 0, 0
+  index: -1
+tail_01_def
+  rotate: false
+  xy: 1893, 164
+  size: 105, 90
+  orig: 105, 90
+  offset: 0, 0
+  index: -1
+tail_01_top_01
+  rotate: false
+  xy: 1397, 148
+  size: 122, 106
+  orig: 122, 106
+  offset: 0, 0
+  index: -1
+tail_01_top_02
+  rotate: false
+  xy: 1521, 148
+  size: 122, 106
+  orig: 122, 106
+  offset: 0, 0
+  index: -1
+tail_01_top_03
+  rotate: false
+  xy: 1645, 148
+  size: 122, 106
+  orig: 122, 106
+  offset: 0, 0
+  index: -1
+tail_01_top_04
+  rotate: false
+  xy: 1769, 148
+  size: 122, 106
+  orig: 122, 106
+  offset: 0, 0
+  index: -1
+zahn_01
+  rotate: false
+  xy: 705, 37
+  size: 56, 59
+  orig: 56, 59
+  offset: 0, 0
+  index: -1
+zunge_01
+  rotate: false
+  xy: 1893, 86
+  size: 86, 76
+  orig: 86, 76
+  offset: 0, 0
+  index: -1
