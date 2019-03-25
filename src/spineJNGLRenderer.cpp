@@ -78,7 +78,6 @@ void SkeletonDrawable::draw() const {
 
 	if (vertexEffect != 0) vertexEffect->begin(vertexEffect, skeleton);
 
-	std::vector<jngl::Vertex> vertexArray;
 	jngl::Sprite* texture = 0;
 	for (int i = 0; i < skeleton->slotsCount; ++i) {
 		Slot* slot = skeleton->drawOrder[i];
@@ -118,10 +117,14 @@ void SkeletonDrawable::draw() const {
 			continue;
 		} else continue;
 
-		// Uint8 r = static_cast<Uint8>(skeleton->color.r * slot->color.r * attachmentColor->r * 255);
-		// Uint8 g = static_cast<Uint8>(skeleton->color.g * slot->color.g * attachmentColor->g * 255);
-		// Uint8 b = static_cast<Uint8>(skeleton->color.b * slot->color.b * attachmentColor->b * 255);
-		// Uint8 a = static_cast<Uint8>(skeleton->color.a * slot->color.a * attachmentColor->a * 255);
+		const auto r =
+		    static_cast<uint8_t>(skeleton->color.r * slot->color.r * attachmentColor->r * 255);
+		const auto g =
+		    static_cast<uint8_t>(skeleton->color.g * slot->color.g * attachmentColor->g * 255);
+		const auto b =
+		    static_cast<uint8_t>(skeleton->color.b * slot->color.b * attachmentColor->b * 255);
+		const auto a =
+		    static_cast<uint8_t>(skeleton->color.a * slot->color.a * attachmentColor->a * 255);
 		// vertex.color.r = r;
 		// vertex.color.g = g;
 		// vertex.color.b = b;
@@ -225,6 +228,7 @@ void SkeletonDrawable::draw() const {
 				// vertexArray->append(vertex);
 			}
 		} else {
+			std::vector<jngl::Vertex> vertexArray;
 			for (int i = 0; i < indicesCount; ++i) {
 				int index = indices[i] << 1;
 				vertexArray.push_back(jngl::Vertex{
@@ -234,15 +238,17 @@ void SkeletonDrawable::draw() const {
 					uvs[index + 1], // * size.y
 				});
 			}
+			jngl::setSpriteColor(r, g, b, a);
+			texture->drawMesh(vertexArray);
 		}
 
 		spSkeletonClipping_clipEnd(clipper, slot);
 	}
-	texture->drawMesh(vertexArray);
 	// target.draw(*vertexArray, states);
 	spSkeletonClipping_clipEnd2(clipper);
 
 	if (vertexEffect != 0) vertexEffect->end(vertexEffect);
+	jngl::setSpriteColor(255, 255, 255, 255);
 }
 
 }
