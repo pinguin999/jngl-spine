@@ -68,7 +68,7 @@ void testcase (void func(SkeletonData* skeletonData, Atlas* atlas),
 		float scale) {
 	jngl::cancelQuit();
 	jngl::showWindow("Spine JNGL - vine", 640, 640, false, {1,1}, {1,1});
-	jngl::setBackgroundColor(0, 0, 0);
+	jngl::setBackgroundColor(0x000000_rgb);
 	Atlas* atlas = Atlas_createFromFile(atlasName, 0);
 
 	SkeletonData* skeletonData = readSkeletonJsonData(jsonName, atlas, scale);

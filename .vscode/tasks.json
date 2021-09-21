@@ -3,7 +3,7 @@
 	"osx": {
 		"args": [
 			"-lc",
-			"cd \"\"${workspaceRoot}\"\" && clear && cd build && make -j$(nproc)"
+			"cd \"\"${workspaceRoot}\"\" && clear && cd build && ninja"
 		],
 		"command": "/bin/bash"
 	},
