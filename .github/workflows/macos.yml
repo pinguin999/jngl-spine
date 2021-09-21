@@ -8,7 +8,7 @@ jobs:
       with:
         submodules: true
     - name: Install dependencies
-      run: brew install sdl2 libvorbis libepoxy pkg-config boost ninja
+      run: brew install sdl2 libepoxy boost ninja
     - name: Configure
       run: cmake -Bbuild -GNinja
     - name: Build
