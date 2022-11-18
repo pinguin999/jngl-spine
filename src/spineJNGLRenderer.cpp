@@ -12,7 +12,7 @@ void _AtlasPage_createTexture (AtlasPage* self, const char* path){
 	jngl::Sprite* texture = new jngl::Sprite(path);
 	// if (!texture->loadFromFile(path)) return;
 
-    // TODO
+	// TODO
 	// if (self->magFilter == SP_ATLAS_LINEAR) texture->setSmooth(true);
 	// if (self->uWrap == SP_ATLAS_REPEAT && self->vWrap == SP_ATLAS_REPEAT) texture->setRepeated(true);
 
@@ -27,7 +27,14 @@ void _AtlasPage_disposeTexture (AtlasPage* self){
 }
 
 char* _Util_readFile (const char* path, int* length){
-	return _spReadFile(path, length);
+	const auto str = jngl::readAsset(path).str();
+	if (length) {
+		*length = static_cast<int>(str.length());
+	}
+	char* buf = static_cast<char*>(malloc(str.length() + 1));
+	std::copy(str.begin(), str.end(), buf);
+	buf[str.length()] = '\0';
+	return buf;
 }
 
 
@@ -35,7 +42,7 @@ namespace spine {
 
 SkeletonDrawable::SkeletonDrawable (SkeletonData* skeletonData, AnimationStateData* stateData) :
 		timeScale(1),
-		// vertexArray(new VertexArray(Triangles, skeletonData->bonesCount * 4)),
+  // vertexArray(new VertexArray(Triangles, skeletonData->bonesCount * 4)),
 		vertexEffect(0),
 		worldVertices(0), clipper(0) {
 	Bone_setYDown(true);
@@ -117,14 +124,14 @@ void SkeletonDrawable::draw() const {
 			continue;
 		} else continue;
 
-		const auto r =
-		    static_cast<uint8_t>(skeleton->color.r * slot->color.r * attachmentColor->r * 255);
-		const auto g =
-		    static_cast<uint8_t>(skeleton->color.g * slot->color.g * attachmentColor->g * 255);
-		const auto b =
-		    static_cast<uint8_t>(skeleton->color.b * slot->color.b * attachmentColor->b * 255);
-		const auto a =
-		    static_cast<uint8_t>(skeleton->color.a * slot->color.a * attachmentColor->a * 255);
+		 const auto r =
+		 	static_cast<uint8_t>(skeleton->color.r * slot->color.r * attachmentColor->r * 255);
+		 const auto g =
+		 	static_cast<uint8_t>(skeleton->color.g * slot->color.g * attachmentColor->g * 255);
+		 const auto b =
+		 	static_cast<uint8_t>(skeleton->color.b * slot->color.b * attachmentColor->b * 255);
+		 const auto a =
+		 	static_cast<uint8_t>(skeleton->color.a * slot->color.a * attachmentColor->a * 255);
 		// vertex.color.r = r;
 		// vertex.color.g = g;
 		// vertex.color.b = b;
@@ -136,7 +143,7 @@ void SkeletonDrawable::draw() const {
 		// light.b = b / 255.0f;
 		// light.a = a / 255.0f;
 
-        // TODO wieder rein
+		// TODO wieder rein
 		// sf::BlendMode blend;
 		// if (!usePremultipliedAlpha) {
 		// 	switch (slot->data->blendMode) {
@@ -177,8 +184,8 @@ void SkeletonDrawable::draw() const {
 		// if (states.texture == 0) states.texture = texture;
 
 		// if (states.blendMode != blend || states.texture != texture) {
-			// target.draw(*vertexArray, states);
-			// vertexArray->clear();
+		// target.draw(*vertexArray, states);
+		// vertexArray->clear();
 		// 	states.blendMode = blend;
 		// 	states.texture = texture;
 		// }
@@ -232,14 +239,21 @@ void SkeletonDrawable::draw() const {
 			for (int i = 0; i < indicesCount; ++i) {
 				int index = indices[i] << 1;
 				vertexArray.push_back(jngl::Vertex{
-					vertices[index],
+				    vertices[index],
 					vertices[index + 1],
-					uvs[index], // * size.x
-					uvs[index + 1], // * size.y
+				    uvs[index], // * size.x
+				    uvs[index + 1], // * size.y
 				});
 			}
-			jngl::setSpriteColor(r, g, b, a);
-			texture->drawMesh(vertexArray);
+			if (r < 250 || g < 250 || b < 250) {
+				jngl::setSpriteColor(r, g, b);
+			}
+			if (texture)
+			{
+				jngl::setSpriteColor(r, g, b, a);
+				texture->drawMesh(vertexArray);
+				jngl::setSpriteColor(255, 255, 255, 255);
+			}
 		}
 
 		spSkeletonClipping_clipEnd(clipper, slot);
