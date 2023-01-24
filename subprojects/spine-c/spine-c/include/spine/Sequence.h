@@ -27,17 +27,49 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <spine/TransformConstraintData.h>
-#include <spine/extension.h>
+#ifndef SPINE_SEQUENCE_H
+#define SPINE_SEQUENCE_H
 
-spTransformConstraintData *spTransformConstraintData_create(const char *name) {
-	spTransformConstraintData *self = NEW(spTransformConstraintData);
-	MALLOC_STR(self->name, name);
-	return self;
-}
+#include <spine/dll.h>
+#include <spine/TextureRegion.h>
+#include <spine/Atlas.h>
+#include "Attachment.h"
+#include "Slot.h"
 
-void spTransformConstraintData_dispose(spTransformConstraintData *self) {
-	FREE(self->name);
-	FREE(self->bones);
-	FREE(self);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+_SP_ARRAY_DECLARE_TYPE(spTextureRegionArray, spTextureRegion*)
+
+typedef struct spSequence {
+	int id;
+	int start;
+	int digits;
+	int setupIndex;
+	spTextureRegionArray *regions;
+} spSequence;
+
+SP_API spSequence *spSequence_create(int numRegions);
+
+SP_API void spSequence_dispose(spSequence *self);
+
+SP_API spSequence *spSequence_copy(spSequence *self);
+
+SP_API void spSequence_apply(spSequence *self, spSlot *slot, spAttachment *attachment);
+
+SP_API void spSequence_getPath(spSequence *self, const char *basePath, int index, char *path);
+
+#define SP_SEQUENCE_MODE_HOLD 0
+#define SP_SEQUENCE_MODE_ONCE 1
+#define SP_SEQUENCE_MODE_LOOP 2
+#define SP_SEQUENCE_MODE_PINGPONG 3
+#define SP_SEQUENCE_MODE_ONCEREVERSE 4
+#define SP_SEQUENCE_MODE_LOOPREVERSE 5
+#define SP_SEQUENCE_MODE_PINGPONGREVERSE 6
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif

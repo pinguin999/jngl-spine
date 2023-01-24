@@ -12,26 +12,26 @@ using namespace spine;
 const int WINDOW_WIDTH = 1024;
 const int WINDOW_HEIGHT = 768;
 
-void callback (AnimationState* state, EventType type, TrackEntry* entry, Event* event) {
+void callback (spAnimationState* state, spEventType type, spTrackEntry* entry, spEvent* event) {
 	const char* animationName = (entry && entry->animation) ? entry->animation->name : 0;
 
 	switch (type) {
-	case ANIMATION_START:
+	case SP_ANIMATION_START:
 		printf("%d start: %s\n", entry->trackIndex, animationName);
 		break;
-	case ANIMATION_INTERRUPT:
+	case SP_ANIMATION_INTERRUPT:
 		printf("%d interrupt: %s\n", entry->trackIndex, animationName);
 		break;
-	case ANIMATION_END:
+	case SP_ANIMATION_END:
 		printf("%d end: %s\n", entry->trackIndex, animationName);
 		break;
-	case ANIMATION_COMPLETE:
+	case SP_ANIMATION_COMPLETE:
 		printf("%d complete: %s\n", entry->trackIndex, animationName);
 		break;
-	case ANIMATION_DISPOSE:
+	case SP_ANIMATION_DISPOSE:
 		printf("%d dispose: %s\n", entry->trackIndex, animationName);
 		break;
-	case ANIMATION_EVENT:
+	case SP_ANIMATION_EVENT:
 		printf("%d event: %s, %s: %d, %f, %s\n", entry->trackIndex, animationName, event->data->name, event->intValue, event->floatValue,
 				event->stringValue);
 		break;
@@ -39,60 +39,60 @@ void callback (AnimationState* state, EventType type, TrackEntry* entry, Event* 
 	fflush(stdout);
 }
 
-SkeletonData* readSkeletonJsonData (const char* filename, Atlas* atlas, float scale) {
-	SkeletonJson* json = SkeletonJson_create(atlas);
+spSkeletonData* readSkeletonJsonData (const char* filename, spAtlas* atlas, float scale) {
+	spSkeletonJson* json = spSkeletonJson_create(atlas);
 	json->scale = scale;
-	SkeletonData* skeletonData = SkeletonJson_readSkeletonDataFile(json, filename);
+	spSkeletonData* skeletonData = spSkeletonJson_readSkeletonDataFile(json, filename);
 	if (!skeletonData) {
 		printf("%s\n", json->error);
 		exit(0);
 	}
-	SkeletonJson_dispose(json);
+	spSkeletonJson_dispose(json);
 	return skeletonData;
 }
 
-SkeletonData* readSkeletonBinaryData (const char* filename, Atlas* atlas, float scale) {
-	SkeletonBinary* binary = SkeletonBinary_create(atlas);
+spSkeletonData* readSkeletonBinaryData (const char* filename, spAtlas* atlas, float scale) {
+	spSkeletonBinary* binary = spSkeletonBinary_create(atlas);
 	binary->scale = scale;
-	SkeletonData *skeletonData = SkeletonBinary_readSkeletonDataFile(binary, filename);
+	spSkeletonData *skeletonData = spSkeletonBinary_readSkeletonDataFile(binary, filename);
 	if (!skeletonData) {
 		printf("%s\n", binary->error);
 		exit(0);
 	}
-	SkeletonBinary_dispose(binary);
+	spSkeletonBinary_dispose(binary);
 	return skeletonData;
 }
 
-void testcase (void func(SkeletonData* skeletonData, Atlas* atlas),
+void testcase (void func(spSkeletonData* skeletonData, spAtlas* atlas),
 		const char* jsonName, const char* binaryName, const char* atlasName,
 		float scale) {
 	jngl::cancelQuit();
 	jngl::showWindow("Spine JNGL - vine", 640, 640, false, {1,1}, {1,1});
 	jngl::setBackgroundColor(0x000000_rgb);
-	Atlas* atlas = Atlas_createFromFile(atlasName, 0);
+	spAtlas* atlas = spAtlas_createFromFile(atlasName, 0);
 
-	SkeletonData* skeletonData = readSkeletonJsonData(jsonName, atlas, scale);
+	spSkeletonData* skeletonData = readSkeletonJsonData(jsonName, atlas, scale);
 	func(skeletonData, atlas);
-	SkeletonData_dispose(skeletonData);
+	spSkeletonData_dispose(skeletonData);
 
 	jngl::cancelQuit();
 	skeletonData = readSkeletonBinaryData(binaryName, atlas, scale);
 	func(skeletonData, atlas);
-	SkeletonData_dispose(skeletonData);
+	spSkeletonData_dispose(skeletonData);
 
-	Atlas_dispose(atlas);
+	spAtlas_dispose(atlas);
 }
 
-void coin (SkeletonData* skeletonData, Atlas* atlas) {
+void coin (spSkeletonData* skeletonData, spAtlas* atlas) {
 	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
 	drawable->timeScale = 1;
 
-	Skeleton* skeleton = drawable->skeleton;
+	spSkeleton* skeleton = drawable->skeleton;
 	skeleton->x = 320;
 	skeleton->y = 590;
-	Skeleton_updateWorldTransform(skeleton);
+	spSkeleton_updateWorldTransform(skeleton);
 
-	AnimationState_setAnimationByName(drawable->state, 0, "rotate", true);
+	spAnimationState_setAnimationByName(drawable->state, 0, "animation", true);
 
 	while (jngl::running()) {
 		jngl::updateInput();
@@ -104,16 +104,16 @@ void coin (SkeletonData* skeletonData, Atlas* atlas) {
 	}
 }
 
-void vine (SkeletonData* skeletonData, Atlas* atlas) {
+void vine (spSkeletonData* skeletonData, spAtlas* atlas) {
 	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
 	drawable->timeScale = 1;
 
-	Skeleton* skeleton = drawable->skeleton;
+	spSkeleton* skeleton = drawable->skeleton;
 	skeleton->x = 320;
 	skeleton->y = 590;
-	Skeleton_updateWorldTransform(skeleton);
+	spSkeleton_updateWorldTransform(skeleton);
 
-	AnimationState_setAnimationByName(drawable->state, 0, "grow", true);
+	spAnimationState_setAnimationByName(drawable->state, 0, "grow", true);
 
 	jngl::setTitle("Spine JNGL - vine");
 	while (jngl::running()) {
@@ -126,16 +126,16 @@ void vine (SkeletonData* skeletonData, Atlas* atlas) {
 	}
 }
 
-void tank (SkeletonData* skeletonData, Atlas* atlas) {
+void tank (spSkeletonData* skeletonData, spAtlas* atlas) {
 	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
 	drawable->timeScale = 1;
 
-	Skeleton* skeleton = drawable->skeleton;
+	spSkeleton* skeleton = drawable->skeleton;
 	skeleton->x = 500;
 	skeleton->y = 590;
-	Skeleton_updateWorldTransform(skeleton);
+	spSkeleton_updateWorldTransform(skeleton);
 
-	AnimationState_setAnimationByName(drawable->state, 0, "drive", true);
+	spAnimationState_setAnimationByName(drawable->state, 0, "drive", true);
 
 	jngl::setTitle("Spine JNGL - tank");
 
@@ -147,16 +147,16 @@ void tank (SkeletonData* skeletonData, Atlas* atlas) {
 	}
 }
 
-void pd (SkeletonData* skeletonData, Atlas* atlas) {
+void pd (spSkeletonData* skeletonData, spAtlas* atlas) {
 	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
 	drawable->timeScale = 1;
 
-	Skeleton* skeleton = drawable->skeleton;
+	spSkeleton* skeleton = drawable->skeleton;
 	skeleton->x = 900;
 	skeleton->y = 410;
-	Skeleton_updateWorldTransform(skeleton);
+	spSkeleton_updateWorldTransform(skeleton);
 
-	AnimationState_setAnimationByName(drawable->state, 0, "idle", true);
+	spAnimationState_setAnimationByName(drawable->state, 0, "idle", true);
 
 	jngl::setTitle("Spine JNGL - Dog");
 
@@ -171,8 +171,8 @@ void pd (SkeletonData* skeletonData, Atlas* atlas) {
 /**
  * Used for debugging purposes during runtime development
  */
-void test (SkeletonData* skeletonData, Atlas* atlas) {
-	spSkeleton* skeleton = Skeleton_create(skeletonData);
+void test (spSkeletonData* skeletonData, spAtlas* atlas) {
+	spSkeleton* skeleton = spSkeleton_create(skeletonData);
 	spAnimationStateData* animData = spAnimationStateData_create(skeletonData);
 	spAnimationState* animState = spAnimationState_create(animData);
 	spAnimationState_setAnimationByName(animState, 0, "drive", true);
@@ -180,7 +180,6 @@ void test (SkeletonData* skeletonData, Atlas* atlas) {
 
 	float d = 3;
 	for (int i = 0; i < 1; i++) {
-		spSkeleton_update(skeleton, d);
 		spAnimationState_update(animState, d);
 		spAnimationState_apply(animState, skeleton);
 		spSkeleton_updateWorldTransform(skeleton);
@@ -192,7 +191,7 @@ void test (SkeletonData* skeletonData, Atlas* atlas) {
 		d += 0.1f;
 	}
 
-	Skeleton_dispose(skeleton);
+	spSkeleton_dispose(skeleton);
 }
 
 JNGL_MAIN_BEGIN {

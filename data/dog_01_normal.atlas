@@ -1,195 +1,86 @@
-
 dog_01_normal.png
-size: 2048,256
-format: RGBA8888
-filter: Linear,Linear
-repeat: none
+size:2048,256
+filter:Linear,Linear
+pma:true
 bein_a_01
-  rotate: false
-  xy: 1694, 68
-  size: 90, 78
-  orig: 90, 78
-  offset: 0, 0
-  index: -1
+bounds:1703,167,88,76
+offsets:1,1,90,78
 bein_b_01
-  rotate: false
-  xy: 1786, 68
-  size: 90, 78
-  orig: 90, 78
-  offset: 0, 0
-  index: -1
+bounds:1793,167,88,76
+offsets:1,1,90,78
 bein_c_01
-  rotate: false
-  xy: 1935, 6
-  size: 71, 78
-  orig: 71, 78
-  offset: 0, 0
-  index: -1
+bounds:1969,174,69,76
+offsets:1,1,71,78
+rotate:90
 bein_d_01
-  rotate: false
-  xy: 632, 17
-  size: 71, 78
-  orig: 71, 78
-  offset: 0, 0
-  index: -1
+bounds:635,78,69,76
+offsets:1,1,71,78
+rotate:90
 blink_01_01
-  rotate: false
-  xy: 434, 10
-  size: 97, 85
-  orig: 97, 85
-  offset: 0, 0
-  index: -1
+bounds:1113,159,97,84
+offsets:0,0,97,85
 blink_01_02
-  rotate: false
-  xy: 533, 10
-  size: 97, 85
-  orig: 97, 85
-  offset: 0, 0
-  index: -1
+bounds:1212,159,97,84
+offsets:0,0,97,85
 blink_01_03
-  rotate: false
-  xy: 1397, 61
-  size: 97, 85
-  orig: 97, 85
-  offset: 0, 0
-  index: -1
+bounds:1311,159,97,84
+offsets:0,0,97,85
 blink_01_04
-  rotate: false
-  xy: 1496, 61
-  size: 97, 85
-  orig: 97, 85
-  offset: 0, 0
-  index: -1
+bounds:1410,159,97,84
+offsets:0,0,97,85
 blink_01_05
-  rotate: false
-  xy: 1595, 61
-  size: 97, 85
-  orig: 97, 85
-  offset: 0, 0
-  index: -1
+bounds:1509,159,97,84
+offsets:0,0,97,85
 haare_01_01
-  rotate: false
-  xy: 641, 98
-  size: 187, 156
-  orig: 187, 156
-  offset: 0, 0
-  index: -1
+bounds:995,175,116,68
+offsets:32,40,187,156
 haare_01_02
-  rotate: false
-  xy: 830, 98
-  size: 187, 156
-  orig: 187, 156
-  offset: 0, 0
-  index: -1
+bounds:1608,151,93,92
+offsets:49,30,187,156
 haare_01_03
-  rotate: false
-  xy: 1019, 98
-  size: 187, 156
-  orig: 187, 156
-  offset: 0, 0
-  index: -1
+bounds:762,151,126,92
+offsets:26,25,187,156
 haare_01_04
-  rotate: false
-  xy: 1208, 98
-  size: 187, 156
-  orig: 187, 156
-  offset: 0, 0
-  index: -1
+bounds:635,149,125,94
+offsets:42,9,187,156
 kiefer_01
-  rotate: false
-  xy: 434, 97
-  size: 205, 157
-  orig: 205, 157
-  offset: 0, 0
-  index: -1
+bounds:430,88,203,155
+offsets:1,1,205,157
 koerper_01
-  rotate: false
-  xy: 2, 39
-  size: 214, 215
-  orig: 214, 215
-  offset: 0, 0
-  index: -1
+bounds:2,30,212,213
+offsets:1,1,214,215
 koerper_01b
-  rotate: false
-  xy: 218, 39
-  size: 214, 215
-  orig: 214, 215
-  offset: 0, 0
-  index: -1
+bounds:216,30,212,213
+offsets:1,1,214,215
 krone_01_a
-  rotate: true
-  xy: 1878, 2
-  size: 82, 55
-  orig: 82, 55
-  offset: 0, 0
-  index: -1
+bounds:430,31,82,55
 pupille_l_01
-  rotate: false
-  xy: 1981, 147
-  size: 16, 15
-  orig: 16, 15
-  offset: 0, 0
-  index: -1
+bounds:995,160,14,13
+offsets:1,1,16,15
 pupille_r_01
-  rotate: false
-  xy: 2, 9
-  size: 26, 28
-  orig: 26, 28
-  offset: 0, 0
-  index: -1
+bounds:2,2,24,26
+offsets:1,1,26,28
 spit001
-  rotate: false
-  xy: 2000, 216
-  size: 44, 38
-  orig: 44, 38
-  offset: 0, 0
-  index: -1
+bounds:589,48,44,38
 tail_01_def
-  rotate: false
-  xy: 1893, 164
-  size: 105, 90
-  orig: 105, 90
-  offset: 0, 0
-  index: -1
+bounds:890,154,103,89
+offsets:1,1,105,90
 tail_01_top_01
-  rotate: false
-  xy: 1397, 148
-  size: 122, 106
-  orig: 122, 106
-  offset: 0, 0
-  index: -1
+bounds:514,25,73,61
+offsets:32,29,122,106
 tail_01_top_02
-  rotate: false
-  xy: 1521, 148
-  size: 122, 106
-  orig: 122, 106
-  offset: 0, 0
-  index: -1
+bounds:713,86,61,47
+offsets:44,43,122,106
+rotate:90
 tail_01_top_03
-  rotate: false
-  xy: 1645, 148
-  size: 122, 106
-  orig: 122, 106
-  offset: 0, 0
-  index: -1
+bounds:818,100,46,49
+offsets:44,40,122,106
 tail_01_top_04
-  rotate: false
-  xy: 1769, 148
-  size: 122, 106
-  orig: 122, 106
-  offset: 0, 0
-  index: -1
+bounds:635,52,25,24
+offsets:50,45,122,106
 zahn_01
-  rotate: false
-  xy: 705, 37
-  size: 56, 59
-  orig: 56, 59
-  offset: 0, 0
-  index: -1
+bounds:762,92,54,57
+offsets:1,1,56,59
 zunge_01
-  rotate: false
-  xy: 1893, 86
-  size: 86, 76
-  orig: 86, 76
-  offset: 0, 0
-  index: -1
+bounds:1883,169,84,74
+offsets:1,1,86,76
