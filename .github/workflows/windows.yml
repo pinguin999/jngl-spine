@@ -1,0 +1,19 @@
+name: Windows
+on:
+  push:
+    # branches-ignore:
+    #   - master
+jobs:
+  msvc:
+    runs-on: windows-2022
+    steps:
+    - uses: actions/checkout@v3
+    - name: Checkout submodules
+      run: |
+        git submodule update --init --recursive
+    - uses: ilammy/msvc-dev-cmd@v1
+    - name: Build
+      shell: bash
+      run: |
+        cmake -Bbuild -GNinja -DCMAKE_BUILD_TYPE=Release -DJNGL_VIDEO=0 -DBUILD_SHARED_LIBS=0
+        ninja -Cbuild
