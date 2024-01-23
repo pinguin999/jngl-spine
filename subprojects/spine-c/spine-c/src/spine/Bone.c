@@ -1,70 +1,78 @@
 /******************************************************************************
- * Spine Runtimes Software License v2.5
+ * Spine Runtimes License Agreement
+ * Last updated September 24, 2021. Replaces all prior versions.
  *
- * Copyright (c) 2013-2016, Esoteric Software
- * All rights reserved.
+ * Copyright (c) 2013-2021, Esoteric Software LLC
  *
- * You are granted a perpetual, non-exclusive, non-sublicensable, and
- * non-transferable license to use, install, execute, and perform the Spine
- * Runtimes software and derivative works solely for personal or internal
- * use. Without the written permission of Esoteric Software (see Section 2 of
- * the Spine Software License Agreement), you may not (a) modify, translate,
- * adapt, or develop new applications using the Spine Runtimes or otherwise
- * create derivative works or improvements of the Spine Runtimes or (b) remove,
- * delete, alter, or obscure any trademarks or any copyright, trademark, patent,
- * or other intellectual property or proprietary rights notices on or in the
- * Software, including any copy thereof. Redistributions in binary or source
- * form must include this license and terms.
+ * Integration of the Spine Runtimes into software or otherwise creating
+ * derivative works of the Spine Runtimes is permitted under the terms and
+ * conditions of Section 2 of the Spine Editor License Agreement:
+ * http://esotericsoftware.com/spine-editor-license
  *
- * THIS SOFTWARE IS PROVIDED BY ESOTERIC SOFTWARE "AS IS" AND ANY EXPRESS OR
- * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
- * MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO
- * EVENT SHALL ESOTERIC SOFTWARE BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,
- * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES, BUSINESS INTERRUPTION, OR LOSS OF
- * USE, DATA, OR PROFITS) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER
- * IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
- * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
- * POSSIBILITY OF SUCH DAMAGE.
+ * Otherwise, it is permitted to integrate the Spine Runtimes into software
+ * or otherwise create derivative works of the Spine Runtimes (collectively,
+ * "Products"), provided that each user of the Products must obtain their own
+ * Spine Editor license and redistribution of the Products in any form must
+ * include this license and copyright notice.
+ *
+ * THE SPINE RUNTIMES ARE PROVIDED BY ESOTERIC SOFTWARE LLC "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL ESOTERIC SOFTWARE LLC BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES,
+ * BUSINESS INTERRUPTION, OR LOSS OF USE, DATA, OR PROFITS) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+ * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
 #include <spine/Bone.h>
 #include <spine/extension.h>
 #include <stdio.h>
+
 static int yDown;
 
-void spBone_setYDown (int value) {
+void spBone_setYDown(int value) {
 	yDown = value;
 }
 
-int spBone_isYDown () {
+int spBone_isYDown() {
 	return yDown;
 }
 
-spBone* spBone_create (spBoneData* data, spSkeleton* skeleton, spBone* parent) {
-	spBone* self = NEW(spBone);
-	CONST_CAST(spBoneData*, self->data) = data;
-	CONST_CAST(spSkeleton*, self->skeleton) = skeleton;
-	CONST_CAST(spBone*, self->parent) = parent;
+spBone *spBone_create(spBoneData *data, spSkeleton *skeleton, spBone *parent) {
+	spBone *self = NEW(spBone);
+	CONST_CAST(spBoneData *, self->data) = data;
+	CONST_CAST(spSkeleton *, self->skeleton) = skeleton;
+	CONST_CAST(spBone *, self->parent) = parent;
 	CONST_CAST(float, self->a) = 1.0f;
 	CONST_CAST(float, self->d) = 1.0f;
 	spBone_setToSetupPose(self);
 	return self;
 }
 
-void spBone_dispose (spBone* self) {
+void spBone_dispose(spBone *self) {
 	FREE(self->children);
 	FREE(self);
 }
 
-void spBone_updateWorldTransform (spBone* self) {
-	spBone_updateWorldTransformWith(self, self->x, self->y, self->rotation, self->scaleX, self->scaleY, self->shearX, self->shearY);
+void spBone_update(spBone *self) {
+	spBone_updateWorldTransformWith(self, self->ax, self->ay, self->arotation, self->ascaleX, self->ascaleY, self->ashearX, self->ashearY);
 }
 
-void spBone_updateWorldTransformWith (spBone* self, float x, float y, float rotation, float scaleX, float scaleY, float shearX, float shearY) {
+void spBone_updateWorldTransform(spBone *self) {
+	spBone_updateWorldTransformWith(self, self->x, self->y, self->rotation, self->scaleX, self->scaleY, self->shearX,
+									self->shearY);
+}
+
+void spBone_updateWorldTransformWith(spBone *self, float x, float y, float rotation, float scaleX, float scaleY,
+									 float shearX, float shearY) {
 	float cosine, sine;
 	float pa, pb, pc, pd;
-	spBone* parent = self->parent;
+	spBone *parent = self->parent;
+	float sx = self->skeleton->scaleX;
+	float sy = self->skeleton->scaleY * (spBone_isYDown() ? -1 : 1);
 
 	self->ax = x;
 	self->ay = y;
@@ -73,30 +81,15 @@ void spBone_updateWorldTransformWith (spBone* self, float x, float y, float rota
 	self->ascaleY = scaleY;
 	self->ashearX = shearX;
 	self->ashearY = shearY;
-	self->appliedValid = 1;
 
 	if (!parent) { /* Root bone. */
 		float rotationY = rotation + 90 + shearY;
-		float la = COS_DEG(rotation + shearX) * scaleX;
-		float lb = COS_DEG(rotationY) * scaleY;
-		float lc = SIN_DEG(rotation + shearX) * scaleX;
-		float ld = SIN_DEG(rotationY) * scaleY;
-		if (self->skeleton->flipX) {
-			x = -x;
-			la = -la;
-			lb = -lb;
-		}
-		if (self->skeleton->flipY != yDown) {
-			y = -y;
-			lc = -lc;
-			ld = -ld;
-		}
-		CONST_CAST(float, self->a) = la;
-		CONST_CAST(float, self->b) = lb;
-		CONST_CAST(float, self->c) = lc;
-		CONST_CAST(float, self->d) = ld;
-		CONST_CAST(float, self->worldX) = x + self->skeleton->x;
-		CONST_CAST(float, self->worldY) = y + self->skeleton->y;
+		CONST_CAST(float, self->a) = COS_DEG(rotation + shearX) * scaleX * sx;
+		CONST_CAST(float, self->b) = COS_DEG(rotationY) * scaleY * sx;
+		CONST_CAST(float, self->c) = SIN_DEG(rotation + shearX) * scaleX * sy;
+		CONST_CAST(float, self->d) = SIN_DEG(rotationY) * scaleY * sy;
+		CONST_CAST(float, self->worldX) = x * sx + self->skeleton->x;
+		CONST_CAST(float, self->worldY) = y * sy + self->skeleton->y;
 		return;
 	}
 
@@ -134,6 +127,8 @@ void spBone_updateWorldTransformWith (spBone* self, float x, float y, float rota
 			float prx, rx, ry, la, lb, lc, ld;
 			if (s > 0.0001f) {
 				s = ABS(pa * pd - pb * pc) / s;
+				pa /= self->skeleton->scaleX;
+				pc /= self->skeleton->scaleY;
 				pb = pc * s;
 				pd = pa * s;
 				prx = ATAN2(pc, pa) * RAD_DEG;
@@ -158,43 +153,39 @@ void spBone_updateWorldTransformWith (spBone* self, float x, float y, float rota
 		case SP_TRANSFORMMODE_NOSCALEORREFLECTION: {
 			float za, zc, s;
 			float r, zb, zd, la, lb, lc, ld;
-			cosine = COS_DEG(rotation); sine = SIN_DEG(rotation);
-			za = pa * cosine + pb * sine;
-			zc = pc * cosine + pd * sine;
+			cosine = COS_DEG(rotation);
+			sine = SIN_DEG(rotation);
+			za = (pa * cosine + pb * sine) / sx;
+			zc = (pc * cosine + pd * sine) / sy;
 			s = SQRT(za * za + zc * zc);
 			if (s > 0.00001f) s = 1 / s;
 			za *= s;
 			zc *= s;
 			s = SQRT(za * za + zc * zc);
-			r = PI / 2 + atan2(zc, za);
+			if (self->data->transformMode == SP_TRANSFORMMODE_NOSCALE && (pa * pd - pb * pc < 0) != (sx < 0 != sy < 0))
+				s = -s;
+			r = PI / 2 + ATAN2(zc, za);
 			zb = COS(r) * s;
 			zd = SIN(r) * s;
 			la = COS_DEG(shearX) * scaleX;
 			lb = COS_DEG(90 + shearY) * scaleY;
 			lc = SIN_DEG(shearX) * scaleX;
 			ld = SIN_DEG(90 + shearY) * scaleY;
-			if (self->data->transformMode != SP_TRANSFORMMODE_NOSCALEORREFLECTION ? pa * pd - pb * pc < 0 : self->skeleton->flipX != self->skeleton->flipY) {
-				zb = -zb;
-				zd = -zd;
-			}
 			CONST_CAST(float, self->a) = za * la + zb * lc;
 			CONST_CAST(float, self->b) = za * lb + zb * ld;
 			CONST_CAST(float, self->c) = zc * la + zd * lc;
 			CONST_CAST(float, self->d) = zc * lb + zd * ld;
-			return;
+			break;
 		}
 	}
-	if (self->skeleton->flipX) {
-		CONST_CAST(float, self->a) = -self->a;
-		CONST_CAST(float, self->b) = -self->b;
-	}
-	if (self->skeleton->flipY != yDown) {
-		CONST_CAST(float, self->c) = -self->c;
-		CONST_CAST(float, self->d) = -self->d;
-	}
+
+	CONST_CAST(float, self->a) *= sx;
+	CONST_CAST(float, self->b) *= sx;
+	CONST_CAST(float, self->c) *= sy;
+	CONST_CAST(float, self->d) *= sy;
 }
 
-void spBone_setToSetupPose (spBone* self) {
+void spBone_setToSetupPose(spBone *self) {
 	self->x = self->data->x;
 	self->y = self->data->y;
 	self->rotation = self->data->rotation;
@@ -204,19 +195,19 @@ void spBone_setToSetupPose (spBone* self) {
 	self->shearY = self->data->shearY;
 }
 
-float spBone_getWorldRotationX (spBone* self) {
+float spBone_getWorldRotationX(spBone *self) {
 	return ATAN2(self->c, self->a) * RAD_DEG;
 }
 
-float spBone_getWorldRotationY (spBone* self) {
+float spBone_getWorldRotationY(spBone *self) {
 	return ATAN2(self->d, self->b) * RAD_DEG;
 }
 
-float spBone_getWorldScaleX (spBone* self) {
+float spBone_getWorldScaleX(spBone *self) {
 	return SQRT(self->a * self->a + self->c * self->c);
 }
 
-float spBone_getWorldScaleY (spBone* self) {
+float spBone_getWorldScaleY(spBone *self) {
 	return SQRT(self->b * self->b + self->d * self->d);
 }
 
@@ -224,12 +215,11 @@ float spBone_getWorldScaleY (spBone* self) {
  * the applied transform after the world transform has been modified directly (eg, by a constraint).
  * <p>
  * Some information is ambiguous in the world transform, such as -1,-1 scale versus 180 rotation. */
-void spBone_updateAppliedTransform (spBone* self) {
-	spBone* parent = self->parent;
-	self->appliedValid = 1;
+void spBone_updateAppliedTransform(spBone *self) {
+	spBone *parent = self->parent;
 	if (!parent) {
-		self->ax = self->worldX;
-		self->ay = self->worldY;
+		self->ax = self->worldX - self->skeleton->x;
+		self->ay = self->worldY - self->skeleton->y;
 		self->arotation = ATAN2(self->c, self->a) * RAD_DEG;
 		self->ascaleX = SQRT(self->a * self->a + self->c * self->c);
 		self->ascaleY = SQRT(self->b * self->b + self->d * self->d);
@@ -265,40 +255,40 @@ void spBone_updateAppliedTransform (spBone* self) {
 	}
 }
 
-void spBone_worldToLocal (spBone* self, float worldX, float worldY, float* localX, float* localY) {
-	float a = self->a, b = self->b, c = self->c, d = self->d;
-	float invDet = 1 / (a * d - b * c);
+void spBone_worldToLocal(spBone *self, float worldX, float worldY, float *localX, float *localY) {
+	float invDet = 1 / (self->a * self->d - self->b * self->c);
 	float x = worldX - self->worldX, y = worldY - self->worldY;
-	*localX = (x * d * invDet - y * b * invDet);
-	*localY = (y * a * invDet - x * c * invDet);
+	*localX = (x * self->d * invDet - y * self->b * invDet);
+	*localY = (y * self->a * invDet - x * self->c * invDet);
 }
 
-void spBone_localToWorld (spBone* self, float localX, float localY, float* worldX, float* worldY) {
+void spBone_localToWorld(spBone *self, float localX, float localY, float *worldX, float *worldY) {
 	float x = localX, y = localY;
 	*worldX = x * self->a + y * self->b + self->worldX;
 	*worldY = x * self->c + y * self->d + self->worldY;
 }
 
-float spBone_worldToLocalRotation (spBone* self, float worldRotation) {
+float spBone_worldToLocalRotation(spBone *self, float worldRotation) {
 	float sine, cosine;
 	sine = SIN_DEG(worldRotation);
 	cosine = COS_DEG(worldRotation);
-	return ATAN2(self->a * sine - self->c * cosine, self->d * cosine - self->b * sine) * RAD_DEG;
+	return ATAN2(self->a * sine - self->c * cosine, self->d * cosine - self->b * sine) * RAD_DEG + self->rotation -
+		   self->shearX;
 }
 
-float spBone_localToWorldRotation (spBone* self, float localRotation) {
+float spBone_localToWorldRotation(spBone *self, float localRotation) {
 	float sine, cosine;
+	localRotation -= self->rotation - self->shearX;
 	sine = SIN_DEG(localRotation);
 	cosine = COS_DEG(localRotation);
 	return ATAN2(cosine * self->c + sine * self->d, cosine * self->a + sine * self->b) * RAD_DEG;
 }
 
-void spBone_rotateWorld (spBone* self, float degrees) {
+void spBone_rotateWorld(spBone *self, float degrees) {
 	float a = self->a, b = self->b, c = self->c, d = self->d;
 	float cosine = COS_DEG(degrees), sine = SIN_DEG(degrees);
 	CONST_CAST(float, self->a) = cosine * a - sine * c;
 	CONST_CAST(float, self->b) = cosine * b - sine * d;
 	CONST_CAST(float, self->c) = sine * a + cosine * c;
 	CONST_CAST(float, self->d) = sine * b + cosine * d;
-	CONST_CAST(int, self->appliedValid) = 0;
 }

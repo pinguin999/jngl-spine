@@ -27,17 +27,35 @@
  * THE SPINE RUNTIMES, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *****************************************************************************/
 
-#include <spine/TransformConstraintData.h>
-#include <spine/extension.h>
+#ifndef SPINE_DEBUG_H_
+#define SPINE_DEBUG_H_
 
-spTransformConstraintData *spTransformConstraintData_create(const char *name) {
-	spTransformConstraintData *self = NEW(spTransformConstraintData);
-	MALLOC_STR(self->name, name);
-	return self;
-}
+#include <spine/spine.h>
 
-void spTransformConstraintData_dispose(spTransformConstraintData *self) {
-	FREE(self->name);
-	FREE(self->bones);
-	FREE(self);
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+void spDebug_printSkeletonData(spSkeletonData *skeletonData);
+
+void spDebug_printAnimation(spAnimation *animation);
+
+void spDebug_printTimeline(spTimeline *timeline);
+
+void spDebug_printBoneDatas(spBoneData **boneDatas, int numBoneDatas);
+
+void spDebug_printBoneData(spBoneData *boneData);
+
+void spDebug_printSkeleton(spSkeleton *skeleton);
+
+void spDebug_printBones(spBone **bones, int numBones);
+
+void spDebug_printBone(spBone *bone);
+
+void spDebug_printFloats(float *values, int numFloats);
+
+#ifdef __cplusplus
 }
+#endif
+
+#endif

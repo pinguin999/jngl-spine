@@ -2,7 +2,6 @@
 
 #include <jngl.hpp>
 
-#define SPINE_SHORT_NAMES
 #include <spine/spine.h>
 #include <spine/extension.h>
 
@@ -12,14 +11,12 @@ namespace spine {
 
 class SkeletonDrawable : public jngl::Drawable {
 public:
-	Skeleton* skeleton;
-	AnimationState* state;
+	spSkeleton* skeleton;
+	spAnimationState* state;
 	float timeScale;
-	// sf::VertexArray* vertexArray;
-	spVertexEffect* vertexEffect;
 
-	SkeletonDrawable (SkeletonData* skeleton, AnimationStateData* stateData = 0);
-	~SkeletonDrawable ();
+	explicit SkeletonDrawable (spSkeletonData* skeleton, spAnimationStateData* stateData = 0);
+	~SkeletonDrawable () override;
 
 	void step() override;
 
