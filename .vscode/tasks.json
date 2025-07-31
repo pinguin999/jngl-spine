@@ -1,5 +1,11 @@
 {
 	"version": "2.0.0",
+	"linux": {
+		"command": "ninja",
+		"options": {
+			"cwd": "build"
+		}
+	},
 	"osx": {
 		"args": [
 			"-lc",

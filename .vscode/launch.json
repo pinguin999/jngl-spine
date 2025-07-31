@@ -5,6 +5,15 @@
 	"version": "0.2.0",
 	"configurations": [
 		{
+			"type": "lldb",
+			"request": "launch",
+			"name": "jngl-spine",
+			"program": "build/Debug/jngl-spine",
+			"args": [],
+			"cwd": "${workspaceFolder}",
+			"preLaunchTask": "build"
+		},
+		{
 			"name": "(lldb) Launch",
             "type": "cppdbg",
             "request": "launch",
