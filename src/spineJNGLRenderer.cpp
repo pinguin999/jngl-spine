@@ -15,23 +15,23 @@ spine::SpineExtension *spine::getDefaultExtension() {
    return new spine::DefaultSpineExtension();
 }
 
-// void _spAtlasPage_createTexture (spine::AtlasPage* self, const char* path){
-// 	jngl::Sprite* texture = new jngl::Sprite(path);
-// 	// if (!texture->loadFromFile(path)) return;
+void TextureLoader::load(spine::AtlasPage& page, const spine::String& path) {
+	jngl::Sprite* texture = new jngl::Sprite(path.buffer());
+	// if (!texture->loadFromFile(path)) return;
 
-// 	// TODO
-// 	// if (self->magFilter == SP_ATLAS_LINEAR) texture->setSmooth(true);
-// 	// if (self->uWrap == SP_ATLAS_REPEAT && self->vWrap == SP_ATLAS_REPEAT) texture->setRepeated(true);
+	// TODO
+	// if (self->magFilter == SP_ATLAS_LINEAR) texture->setSmooth(true);
+	// if (self->uWrap == SP_ATLAS_REPEAT && self->vWrap == SP_ATLAS_REPEAT) texture->setRepeated(true);
 
-// 	self->rendererObject = texture;
-// 	// Vector2u size = texture->getSize();
-// 	self->width = texture->getWidth();
-// 	self->height = texture->getHeight();
-// }
+	page.texture = texture;
+	// Vector2u size = texture->getSize();
+	page.width = texture->getWidth();
+	page.height = texture->getHeight();
+}
 
-// void _spAtlasPage_disposeTexture (spAtlasPage* self){
-// 	delete (jngl::Sprite*)self->rendererObject;
-// }
+void TextureLoader::unload(void* texture) {
+	delete (jngl::Sprite*)texture;
+}
 
 char* _spUtil_readFile (const char* path, int* length){
 	const auto str = jngl::readAsset(path).str();

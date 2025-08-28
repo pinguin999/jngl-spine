@@ -27,3 +27,10 @@ private:
 	spine::SkeletonClipping* clipper;
 	bool usePremultipliedAlpha;
 };
+
+class TextureLoader : public spine::TextureLoader {
+public:
+	void load(spine::AtlasPage& page, const spine::String& path) override;
+
+	void unload(void* texture) override;
+};

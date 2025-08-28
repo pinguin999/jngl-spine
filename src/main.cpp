@@ -40,7 +40,7 @@ void testcase (void func(spine::SkeletonData* skeletonData, spine::Atlas* atlas)
 	jngl::cancelQuit();
 	jngl::showWindow("Spine JNGL - vine", 640, 640, false, {1,1}, {1,1});
 	jngl::setBackgroundColor(0x000000_rgb);
-	spine::Atlas* atlas = new spine::Atlas(atlasName, nullptr);
+	spine::Atlas* atlas = new spine::Atlas(atlasName, new TextureLoader);
 
 	spine::SkeletonData* skeletonData = readSkeletonJsonData(jsonName, atlas, scale);
 	func(skeletonData, atlas);
@@ -54,69 +54,64 @@ void testcase (void func(spine::SkeletonData* skeletonData, spine::Atlas* atlas)
 	delete atlas;
 }
 
-// void coin (spSkeletonData* skeletonData, spAtlas* atlas) {
-// 	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
-// 	drawable->timeScale = 1;
+void coin (spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
+	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
+	drawable->timeScale = 1;
 
-// 	spSkeleton* skeleton = drawable->skeleton;
-// 	skeleton->x = 320;
-// 	skeleton->y = 590;
-// 	spSkeleton_updateWorldTransform(skeleton);
+	spine::Skeleton* skeleton = drawable->skeleton;
+	skeleton->setX(320);
+	skeleton->setY(590);
+	skeleton->updateWorldTransform(spine::Physics_None);
 
-// 	spAnimationState_setAnimationByName(drawable->state, 0, "animation", true);
+	drawable->state->setAnimation(0, "animation", true);
 
-// 	while (jngl::running()) {
-// 		jngl::updateInput();
+	while (jngl::running()) {
+		jngl::updateInput();
+		drawable->step();
+		drawable->draw();
+		jngl::swapBuffers();
+	}
+}
 
-// 		drawable->step();
-// 		drawable->draw();
+void vine (spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
+	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
+	drawable->timeScale = 1;
 
-// 		jngl::swapBuffers();
-// 	}
-// }
+	spine::Skeleton* skeleton = drawable->skeleton;
+	skeleton->setX(320);
+	skeleton->setY(590);
+	skeleton->updateWorldTransform(spine::Physics_None);
 
-// void vine (spSkeletonData* skeletonData, spAtlas* atlas) {
-// 	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
-// 	drawable->timeScale = 1;
+	drawable->state->setAnimation(0, "grow", true);
 
-// 	spSkeleton* skeleton = drawable->skeleton;
-// 	skeleton->x = 320;
-// 	skeleton->y = 590;
-// 	spSkeleton_updateWorldTransform(skeleton);
+	jngl::setTitle("Spine JNGL - vine");
+	while (jngl::running()) {
+		jngl::updateInput();
+		drawable->step();
+		drawable->draw();
+		jngl::swapBuffers();
+	}
+}
 
-// 	spAnimationState_setAnimationByName(drawable->state, 0, "grow", true);
+void tank (spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
+	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
+	drawable->timeScale = 1;
 
-// 	jngl::setTitle("Spine JNGL - vine");
-// 	while (jngl::running()) {
-// 		jngl::updateInput();
+	spine::Skeleton* skeleton = drawable->skeleton;
+	skeleton->setX(500);
+	skeleton->setY(590);
+	skeleton->updateWorldTransform(spine::Physics_None);
 
-// 		drawable->step();
-// 		drawable->draw();
+	drawable->state->setAnimation(0, "drive", true);
 
-// 		jngl::swapBuffers();
-// 	}
-// }
-
-// void tank (spSkeletonData* skeletonData, spAtlas* atlas) {
-// 	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
-// 	drawable->timeScale = 1;
-
-// 	spSkeleton* skeleton = drawable->skeleton;
-// 	skeleton->x = 500;
-// 	skeleton->y = 590;
-// 	spSkeleton_updateWorldTransform(skeleton);
-
-// 	spAnimationState_setAnimationByName(drawable->state, 0, "drive", true);
-
-// 	jngl::setTitle("Spine JNGL - tank");
-
-// 	while (jngl::running()) {
-// 		jngl::updateInput();
-// 		drawable->step();
-// 		drawable->draw();
-// 		jngl::swapBuffers();
-// 	}
-// }
+	jngl::setTitle("Spine JNGL - tank");
+	while (jngl::running()) {
+		jngl::updateInput();
+		drawable->step();
+		drawable->draw();
+		jngl::swapBuffers();
+	}
+}
 
 void pd (spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
 	SkeletonDrawable* drawable = new SkeletonDrawable(skeletonData);
@@ -139,31 +134,32 @@ void pd (spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
 	}
 }
 
-// /**
-//  * Used for debugging purposes during runtime development
-//  */
-// void test (spSkeletonData* skeletonData, spAtlas* atlas) {
-// 	spSkeleton* skeleton = spSkeleton_create(skeletonData);
-// 	spAnimationStateData* animData = spAnimationStateData_create(skeletonData);
-// 	spAnimationState* animState = spAnimationState_create(animData);
-// 	spAnimationState_setAnimationByName(animState, 0, "drive", true);
+/**
+ * Used for debugging purposes during runtime development
+ */
+void test(spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
+	spine::Skeleton* skeleton = new spine::Skeleton(skeletonData);
+	spine::AnimationStateData* animData = new spine::AnimationStateData(skeletonData);
+	spine::AnimationState* animState = new spine::AnimationState(animData);
+	animState->setAnimation(0, "drive", true);
 
+	float d = 3;
+	for (int i = 0; i < 1; i++) {
+		animState->update(d);
+		animState->apply(*skeleton);
+		skeleton->updateWorldTransform(spine::Physics_None);
+		for (int ii = 0; ii < skeleton->getBones().size(); ii++) {
+			spine::Bone* bone = skeleton->getBones()[ii];
+			printf("%s %f %f %f %f %f %f\n", bone->getData().getName().buffer(), bone->getA(), bone->getB(), bone->getC(), bone->getD(), bone->getWorldX(), bone->getWorldY());
+		}
+		printf("========================================\n");
+		d += 0.1f;
+	}
 
-// 	float d = 3;
-// 	for (int i = 0; i < 1; i++) {
-// 		spAnimationState_update(animState, d);
-// 		spAnimationState_apply(animState, skeleton);
-// 		spSkeleton_updateWorldTransform(skeleton);
-// 		for (int ii = 0; ii < skeleton->bonesCount; ii++) {
-// 			spBone* bone = skeleton->bones[ii];
-// 			printf("%s %f %f %f %f %f %f\n", bone->data->name, bone->a, bone->b, bone->c, bone->d, bone->worldX, bone->worldY);
-// 		}
-// 		printf("========================================\n");
-// 		d += 0.1f;
-// 	}
-
-// 	spSkeleton_dispose(skeleton);
-// }
+	delete animState;
+	delete animData;
+	delete skeleton;
+}
 
 JNGL_MAIN_BEGIN {
 	// testcase(test, "data/tank-pro.json", "data/tank-pro.skel", "data/tank.atlas", 1.0f);
