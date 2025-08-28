@@ -3,19 +3,14 @@
 #include <jngl.hpp>
 
 #include <spine/spine.h>
-#include <spine/extension.h>
-
-_SP_ARRAY_DECLARE_TYPE(spColorArray, spColor)
-
-namespace spine {
 
 class SkeletonDrawable : public jngl::Drawable {
 public:
-	spSkeleton* skeleton;
-	spAnimationState* state;
+	spine::Skeleton* skeleton;
+	spine::AnimationState* state;
 	float timeScale;
 
-	explicit SkeletonDrawable (spSkeletonData* skeleton, spAnimationStateData* stateData = 0);
+	explicit SkeletonDrawable (spine::SkeletonData* skeleton, spine::AnimationStateData* stateData = 0);
 	~SkeletonDrawable () override;
 
 	void step() override;
@@ -27,10 +22,8 @@ public:
 private:
 	bool ownsAnimationStateData;
 	float* worldVertices;
-	spFloatArray* tempUvs;
-	spColorArray* tempColors;
-	spSkeletonClipping* clipper;
+	// spine::FloatArray* tempUvs;
+	// spine::ColorArray* tempColors;
+	spine::SkeletonClipping* clipper;
 	bool usePremultipliedAlpha;
 };
-
-}
