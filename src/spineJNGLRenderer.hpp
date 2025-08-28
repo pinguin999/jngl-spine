@@ -21,10 +21,9 @@ public:
 	bool getUsePremultipliedAlpha() { return usePremultipliedAlpha; };
 private:
 	bool ownsAnimationStateData;
-	float* worldVertices;
-	// spine::FloatArray* tempUvs;
-	// spine::ColorArray* tempColors;
-	spine::SkeletonClipping* clipper;
+	mutable spine::Vector<float> worldVertices;
+	mutable spine::Vector<unsigned short> quadIndices;
+	mutable spine::SkeletonClipping clipper;
 	bool usePremultipliedAlpha;
 };
 

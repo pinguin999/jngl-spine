@@ -59,8 +59,8 @@ void coin (spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
 	drawable->timeScale = 1;
 
 	spine::Skeleton* skeleton = drawable->skeleton;
-	skeleton->setX(320);
-	skeleton->setY(590);
+	skeleton->setX(1020);
+	skeleton->setY(190);
 	skeleton->updateWorldTransform(spine::Physics_None);
 
 	drawable->state->setAnimation(0, "animation", true);
@@ -98,8 +98,8 @@ void tank (spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
 	drawable->timeScale = 1;
 
 	spine::Skeleton* skeleton = drawable->skeleton;
-	skeleton->setX(500);
-	skeleton->setY(590);
+	skeleton->setX(1400);
+	skeleton->setY(1250);
 	skeleton->updateWorldTransform(spine::Physics_None);
 
 	drawable->state->setAnimation(0, "drive", true);
@@ -162,9 +162,9 @@ void test(spine::SkeletonData* skeletonData, spine::Atlas* atlas) {
 }
 
 JNGL_MAIN_BEGIN {
-	// testcase(test, "data/tank-pro.json", "data/tank-pro.skel", "data/tank.atlas", 1.0f);
-	// testcase(coin, "data/coin-pro.json", "data/coin-pro.skel", "data/coin.atlas", 0.5f);
-	// testcase(vine, "data/vine-pro.json", "data/vine-pro.skel", "data/vine.atlas", 0.5f);
-	// testcase(tank, "data/tank-pro.json", "data/tank-pro.skel", "data/tank.atlas", 0.2f);
+	testcase(test, "data/tank-pro.json", "data/tank-pro.skel", "data/tank-pro.atlas", 1.0f);
+	testcase(coin, "data/coin-pro.json", "data/coin-pro.skel", "data/coin-pro.atlas", 0.5f);
+	testcase(vine, "data/vine-pro.json", "data/vine-pro.skel", "data/vine-pro.atlas", 0.5f);
+	testcase(tank, "data/tank-pro.json", "data/tank-pro.skel", "data/tank-pro.atlas", 0.2f);
 	testcase(pd, "data/dog_01_normal.json", "data/dog_01_normal.skel", "data/dog_01_normal.atlas", 1.1f);
 } JNGL_MAIN_END
