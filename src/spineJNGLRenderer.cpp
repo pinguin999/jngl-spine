@@ -1,9 +1,13 @@
 #include "spineJNGLRenderer.hpp"
 
-#include "SkeletonRenderer.hpp"
 #include <spine/Extension.h>
 
 #include <jngl.hpp>
+
+// class SkeletonRenderer : public jngl::Singleton<SkeletonRenderer> {
+// public:
+//     spine::SkeletonRenderer spine;
+// };
 
 spine::SpineExtension* spine::getDefaultExtension() {
 	return new spine::DefaultSpineExtension();

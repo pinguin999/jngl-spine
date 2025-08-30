@@ -17,14 +17,11 @@ public:
 
 	void draw() const override;
 
-	void setUsePremultipliedAlpha(bool usePMA) { usePremultipliedAlpha = usePMA; };
-	bool getUsePremultipliedAlpha() { return usePremultipliedAlpha; };
 private:
 	bool ownsAnimationStateData;
 	mutable spine::Vector<float> worldVertices;
 	mutable spine::Vector<unsigned short> quadIndices;
 	mutable spine::SkeletonClipping clipper;
-	bool usePremultipliedAlpha;
 };
 
 class TextureLoader : public spine::TextureLoader {
