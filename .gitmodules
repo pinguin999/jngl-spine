@@ -1,3 +1,6 @@
 [submodule "subprojects/jngl"]
 	path = subprojects/jngl
 	url = https://github.com/jhasse/jngl.git
+[submodule "subprojects/spine-runtimes"]
+	path = subprojects/spine-runtimes
+	url = https://github.com/EsotericSoftware/spine-runtimes.git
